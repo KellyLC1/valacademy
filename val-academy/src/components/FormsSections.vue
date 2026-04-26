@@ -76,31 +76,48 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import axios from 'axios'
 
 const inscription = reactive({ name: '', email: '', phone: '', formation: '', city: '' })
 const sentInscription = ref(false)
 
-function handleInscription() {
-  // TODO : brancher votre API d'inscription
-  console.log('Inscription:', { ...inscription })
-  sentInscription.value = true
-  setTimeout(() => {
-    sentInscription.value = false
-    Object.assign(inscription, { name: '', email: '', phone: '', formation: '', city: '' })
-  }, 4000)
+async function handleInscription() {
+  try {
+    await axios.post('http://localhost:5000/api/inscription', {
+      name: inscription.name,
+      email: inscription.email,
+      phone: inscription.phone,
+      formation: inscription.formation,
+      city: inscription.city
+    })
+    sentInscription.value = true
+    setTimeout(() => {
+      sentInscription.value = false
+      Object.assign(inscription, { name: '', email: '', phone: '', formation: '', city: '' })
+    }, 4000)
+  } catch (error) {
+    alert('Erreur lors de l\'inscription. Merci de réessayer.')
+  }
 }
 
 const contact = reactive({ name: '', email: '', phone: '', message: '' })
 const sentContact = ref(false)
 
-function handleContact() {
-  // TODO : brancher votre API / service d'email
-  console.log('Contact:', { ...contact })
-  sentContact.value = true
-  setTimeout(() => {
-    sentContact.value = false
-    Object.assign(contact, { name: '', email: '', phone: '', message: '' })
-  }, 4000)
+async function handleContact() {
+  try {
+    await axios.post('http://localhost:5000/api/contact', {
+      name: contact.name,
+      email: contact.email,
+      message: contact.message
+    })
+    sentContact.value = true
+    setTimeout(() => {
+      sentContact.value = false
+      Object.assign(contact, { name: '', email: '', phone: '', message: '' })
+    }, 4000)
+  } catch (error) {
+    alert('Erreur lors de l\'envoi du message. Merci de réessayer.')
+  }
 }
 </script>
 

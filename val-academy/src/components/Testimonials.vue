@@ -47,7 +47,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, Navigation } from 'swiper/modules'
 import 'swiper/css'
@@ -65,38 +66,17 @@ function truncate(text) {
     : text
 }
 
-const testimonials = [
-  {
-    text: 'Formation très complète et parfaitement adaptée à notre restaurant. Le formateur était excellent et très pédagogue. Nous sommes maintenant en total conformité HACCP.',
-    name: 'Marie L.',
-    role: 'Gérante de restaurant, Lyon'
-  },
-  {
-    text: 'Grâce à VAL Academy, toute mon équipe est formée aux normes HACCP. Le financement via notre OPCO a été géré sans aucun souci. Je recommande vivement.',
-    name: 'Thomas B.',
-    role: 'Directeur traiteur, Paris'
-  },
-  {
-    text: 'Très bonne organisation, formateurs compétents et disponibles. La formation en distanciel nous a permis de former nos équipes sans interrompre notre activité.',
-    name: 'Sophie M.',
-    role: 'Responsable qualité, Bordeaux'
-  },
-  {
-    text: 'Après notre contrôle sanitaire, nous avons suivi la formation VAL Academy. Résultat : un excellent rapport lors du contrôle suivant. Merci pour cette expertise précieuse.',
-    name: 'Karim D.',
-    role: 'Chef cuisinier, Marseille'
-  },
-  {
-    text: 'Centre sérieux et professionnel. Les attestations Qualiopi et Ministère de l\'Agriculture nous ont rassurés dès le départ. Formation de qualité, à la hauteur de nos attentes.',
-    name: 'Isabelle R.',
-    role: 'Dirigeante agroalimentaire, Nantes'
-  },
-  {
-    text: 'Centre sérieux et professionnel. Les attestations Qualiopi et Ministère de l\'Agriculture nous ont rassurés dès le départ. Formation de qualité, à la hauteur de nos attentes. Centre sérieux et professionnel. Les attestations Qualiopi et Ministère de l\'Agriculture nous ont rassurés dès le départ. Formation de qualité, à la hauteur de nos attentes. Centre sérieux et professionnel. Les attestations Qualiopi et Ministère de l\'Agriculture nous ont rassurés dès le départ. Formation de qualité, à la hauteur de nos attentes.',
-    name: 'Isabelle R.',
-    role: 'Dirigeante agroalimentaire, Nantes'
-  },
-]
+const testimonials = ref([])
+
+async function fetchTestimonials() {
+  try {
+    const res = await axios.get('http://localhost:5000/api/testimonials')
+    testimonials.value = res.data
+  } catch (err) {
+    testimonials.value = []
+  }
+}
+onMounted(fetchTestimonials)
 </script>
 
 <style scoped>
@@ -276,5 +256,46 @@ const testimonials = [
   .custom-swiper-button.next {
     right: -16px;
   }
+}
+
+.testimonials-section {
+  background: var(--cream);
+  padding: 80px 0;
+}
+.testimonials-section h2 {
+  text-align: center;
+  font-size: 2.1rem;
+  color: var(--text);
+  margin-bottom: 38px;
+}
+.testimonials-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+.testimonial-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(31,41,55,0.07);
+  padding: 32px 28px 24px 28px;
+  max-width: 340px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.08rem;
+  position: relative;
+}
+.testimonial-text {
+  color: #444;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+.testimonial-name {
+  color: #9C8570;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 8px;
 }
 </style>

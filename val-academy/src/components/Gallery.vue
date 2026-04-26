@@ -3,10 +3,10 @@
     <div class="container">
       <h2>Galerie</h2>
       <p class="section-sub">Découvrez nos formations et nos centres en images</p>
-      <div class="gallery-grid">
-        <div class="gallery-card" v-for="(img, i) in images" :key="i">
-          <img :src="img.src" :alt="img.alt" />
-          <div class="caption">{{ img.alt }}</div>
+      <div class="masonry-gallery">
+        <div class="masonry-item" v-for="img in images" :key="img._id">
+          <img :src="img.url" :alt="img.title" />
+          <div class="caption">{{ img.title }}</div>
         </div>
       </div>
     </div>
@@ -14,12 +14,20 @@
 </template>
 
 <script setup>
-const images = [
-  { src: '/src/assets/hero.png', alt: 'Salle de formation moderne' },
-  { src: '/src/assets/vite.svg', alt: 'Session HACCP en cours' },
-  { src: '/src/assets/vue.svg', alt: 'Formateur certifié à l’œuvre' },
-  // Ajoutez d'autres images ici
-]
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const images = ref([]);
+
+async function fetchGallery() {
+  try {
+    const res = await axios.get('http://localhost:5000/api/gallery');
+    images.value = res.data;
+  } catch (err) {
+    images.value = [];
+  }
+}
+onMounted(fetchGallery);
 </script>
 
 <style scoped>
@@ -37,35 +45,46 @@ const images = [
   color: var(--muted);
   margin-bottom: 40px;
 }
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
+.masonry-gallery {
+  column-count: 3;
+  column-gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.gallery-card {
+.masonry-item {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: 0 2px 12px rgba(31,41,55,0.06);
-  overflow: hidden;
-  transition: transform 0.18s, box-shadow 0.18s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.gallery-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 6px 24px rgba(245,158,11,0.13);
-}
-.gallery-card img {
+  margin-bottom: 24px;
+  display: inline-block;
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  transition: transform 0.18s, box-shadow 0.18s;
+  overflow: hidden;
+}
+.masonry-item img {
+  width: 100%;
   display: block;
+  border-radius: var(--radius) var(--radius) 0 0;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+.masonry-item:hover img {
+  transform: scale(1.06);
 }
 .caption {
   padding: 14px 10px 10px;
   color: var(--text);
   font-size: 1rem;
   text-align: center;
+}
+@media (max-width: 900px) {
+  .masonry-gallery {
+    column-count: 2;
+  }
+}
+@media (max-width: 600px) {
+  .masonry-gallery {
+    column-count: 1;
+  }
 }
 </style>
