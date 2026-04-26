@@ -2,6 +2,12 @@
 
 Plateforme complète pour centre de formation professionnelle : gestion des formations, galerie photos, avis clients dynamiques, et espace admin sécurisé.
 
+## Technologies utilisées
+
+- **Frontend** : Vue.js 3, Vite, Axios, Swiper, CSS3
+- **Backend** : Node.js, Express, Mongoose (MongoDB), JWT, bcryptjs, express-rate-limit, express-validator, CORS, Nodemailer
+- **Outils de développement** : Mailtrap (test email), Git, VS Code
+
 ## Fonctionnalités principales
 
 - **Frontend Vue.js 3**
@@ -47,6 +53,15 @@ Plateforme complète pour centre de formation professionnelle : gestion des for
    npm run dev
    ```
 
+
+### Création de l’admin
+- Après installation, créer un compte admin avec le script dédié :
+  ```bash
+  cd backend
+  node scripts/createAdmin.js
+  ```
+- Suivre les instructions pour définir l’email et le mot de passe admin.
+
 ## Fonctionnement des avis clients
 
 - L’admin génère une invitation (email du client)
@@ -71,4 +86,6 @@ Plateforme complète pour centre de formation professionnelle : gestion des for
 - KellyLC1
 
 ---
+
+Pour toute question ou aide au déploiement, voir le README ou contacter le mainteneur.
 
